@@ -1,0 +1,57 @@
+
+.App {
+    background-image: url('../../Projects Images/mediamodifier-7cERndkOyDw-unsplash.jpg');
+    background-size: cover;
+    background-position: top 20% right 60%;
+    background-repeat: no-repeat;
+    height: 100vh;
+}
+
+.different-BG {
+    background-image: url('../../Projects Images/testBG.jpg');
+}
+
+.landing-page-text {
+    width: 50%;
+    /* border: 1px solid red; */
+    position: absolute;
+    right: 15%;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.about-us-paragraph {
+    /* border: 1px solid red; */
+    padding-left: 17%;
+    font-style: italic;
+    font-weight: 700;
+    font-size: 1.1rem;
+}
+
+.landing-page-text h1 {
+    font-size: 2.8rem;
+}
+
+.landing-page-text h3 {
+    font-size: 1.5rem;
+    font-weight: 200;
+}
+
+.landing-page-text h5 {
+    font-size: 1rem;
+    font-weight: 200;
+    font-style: italic;
+}
+
+button {
+    background-color: black;
+    font-size: 1rem;
+    color: white;
+    padding:  0.5em 1em;
+    border-radius: 3%;
+    margin-top: 1rem;
+    cursor: pointer;
+}

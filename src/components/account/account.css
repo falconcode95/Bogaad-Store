@@ -1,0 +1,111 @@
+.Account .account-details {
+    display: flex;
+    padding: 10% 3% 0 3%;
+    /* border: 1px solid */
+}
+
+.Account .account-details > * {
+    margin-right: 10%
+}
+
+.Account .account-details > * > * {
+    margin-block: 1rem;
+}
+
+.Account .details {
+    display: flex;
+    /* border: 1px solid  */
+}
+
+.Account .details > * {
+    display: flex;
+    flex-direction: column;
+    /* border: 1px solid red; */
+    margin-inline: 1rem
+}
+
+.Account .details > * > * {
+    /* border: 1px solid rgb(60, 255, 0); */
+    margin-block: 0.4rem
+}
+
+.Account .details input, .Account .change-details input, .Account .delete-account input {
+    width: 32vmin;
+    padding: 0.1rem;
+    border: none;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.418);
+}
+
+.Account .details input:focus, .Account .change-details input:focus, .Account .delete-account input:focus {
+    outline: none;
+}
+
+.Account .wishlist {
+    display: flex;
+    flex-wrap: wrap;
+    /* border: 1px solid; */
+    width: 100%;
+}
+
+.Account .wishlist > *{
+    width: 20%;
+    /* border: 1px solid; */
+    margin-right: 2rem;
+    margin-block: 1rem;
+}
+
+.Account .wishlist img {
+    max-width: 100%;
+    background-color: rgb(240, 240, 240);
+    padding: 1rem;
+}
+
+.Account .right-side {
+    /* border: 1px solid red; */
+    width: 100%
+}
+
+.Account .account-details .left-side {
+    width: 17%;
+}
+
+.Account .change-details {
+    display: flex;
+}
+
+.Account .change-details > * {
+    display: flex;
+    flex-direction: column;
+    margin-right: 1rem;
+    /* border: 1px solid */
+}
+
+.Account .change-details > * > *{
+    margin-block: 1rem;
+}
+
+.Account .change-button {
+    margin: 0 auto;
+    position: relative;
+    left: 50%;
+    transform: translateX(-50%);
+    margin-top: 1rem;
+}
+
+.Account .delete-account > * {
+    margin-block: 1rem;
+}
+
+.Account .delete-account > * > *{
+    margin-right: 1rem;
+}
+
+.Account .delete-account button {
+    position: relative;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.Account .remove-item, .Account label, .Account .account-details .left-side > * {
+    cursor: pointer;
+}

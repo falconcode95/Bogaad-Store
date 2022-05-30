@@ -1,0 +1,77 @@
+.newsletter {
+    /* border: 1px solid; */
+    text-align: center;
+    padding-block: 2em;
+}
+
+.newsletter input, .newsletter button {
+    margin: 2em 1em 2em 0em;
+    padding: 1em;
+}
+
+.newsletter input {
+    width: 30%;
+    outline: none;
+}
+
+.newsletter button {
+    background-color: rgb(175, 23, 23);
+    border: none;
+    color: white;
+    border-radius: 2%;
+}
+
+.footer {
+    display: flex;
+    padding: 5% 10% 0 10%;
+    background-color: rgba(243, 243, 243, 0.404);
+}
+
+.footer > * {
+    width: 25%;
+}
+
+.about-us {
+    margin-right: 5em;
+}
+
+.footer h5, .footer p {
+    color:rgb(146, 146, 146)
+}
+
+.bogaad-email {
+    display: flex;
+    align-items: center;
+    /* border: 1px solid */
+}
+
+.bogaad-email > * {
+    margin-right: 0.5em;
+}
+
+footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-inline: 2em;
+    background-color: rgb(17, 17, 17);
+    margin-top: 1em;
+}
+
+.payment {
+    display: flex;
+    align-items: center;
+}
+
+.payment img {
+    max-width: 3.5vmax;
+    margin-right: 1em;
+}
+
+footer p {
+    color: rgb(201, 201, 201);
+}
+
+.links {
+    cursor: pointer;
+}

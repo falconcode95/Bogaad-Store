@@ -1,0 +1,72 @@
+nav nav, nav .nav-links, nav .cart {
+    display: flex;
+}
+
+a {
+    text-decoration: none;
+    color: black;
+}
+
+nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: fixed;
+    top: 0;
+    padding: 0em 2em;
+    width: 100%;
+    /* border: 1px solid; */
+    z-index: 1;
+}
+
+.nav-background {
+    background-color: white;
+}
+
+nav h3 {
+    font-family: 'Oleo Script Swash Caps', cursive;
+    font-size: 2.5rem;
+    color: rgb(44, 44, 44);
+}
+
+nav > * {
+    /* border: 1px solid; */
+    width: 30%;
+}
+
+.nav-links, nav .cart {
+    justify-content: center;
+}
+
+nav .cart {
+    justify-content: flex-end;
+}
+
+.nav-links > *, nav .cart > *{
+    margin-inline: 1rem;
+}
+
+nav img {
+    max-width: 1.7vmax;
+}
+
+nav .bag {
+    display: flex;
+    position: relative;
+}
+
+nav .bag img {
+    margin-right: 0.3em;
+}
+
+nav .bag h6 {
+    position: absolute;
+    background-color: rgb(253, 76, 76);
+    width: 60%;
+    height: 60%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50%;
+    right: 0;
+}
