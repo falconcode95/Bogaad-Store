@@ -8,6 +8,9 @@ import { addToWishList } from '../store/accountSlice';
 import {useEffect, useState} from 'react';
 
 function Preview() {
+    // const {cartProducts} = useSelector(state => state.cart);
+    const {wishList} = useSelector(state => state.account);
+    const {email} = useSelector(state => state.account.user);
     const dispatch = useDispatch();
     const [size, setSize] = useState();
     const [activeCategory, setActiveCategory] = useState();
@@ -16,7 +19,6 @@ function Preview() {
     const shoeSize = [7,8,9,10];
     const trouserSize = [32,34,36,40];
     const generalSize = ['Small', 'Medium', 'Large'];
-    const {wishList} = useSelector(state => state.account);
     const changeSize = (e)=> {
         if(size){
             const activeElement = document.getElementsByClassName(size);
@@ -28,9 +30,9 @@ function Preview() {
         setSize(e.target.getAttribute('data-name'))
     }
     const {previewProduct, similarProducts, cartProducts} = useSelector(state => state.cart);
+    // console.log(cartProducts, wishList);
     const sizeTable = [ {SIZE: ['M', 'L', 'XL', 'S'], BUST: [88, 88, 96, 86], WAIST: [80, 76, 80, 78], HIPS: [86, 84, 86, 84], LENGTH: [60, 61, 62, 58]}];
     const sizeTableKeys = Object.keys(sizeTable[0]);
-    // console.log(sizeTable[0][sizeTableKeys[0]]);
     const oneToFour = ['1','2','3', '4'];
     const addToCart = ()=> {
         if(!size){
@@ -77,6 +79,52 @@ function Preview() {
     const addToWishlist = ()=> {
         dispatch(addToWishList(previewProduct))
     }
+    useEffect(()=> {
+        console.log('update wish active')
+        const saveData = async()=> {
+            if(cartProducts.length || wishList.length){
+                let jsonCart = {};
+                let jsonWishList = {};
+                const data = {jsonCart: jsonCart,
+                jsonWishList: jsonWishList,
+                email: email};
+                console.log(data)
+                if(cartProducts.length){
+                    let index = [];
+                    for(let i=0; i < cartProducts.length; i++){
+                        index.push(i);
+                    }
+                    for(let i=0; i < cartProducts.length; i++){
+                        jsonCart[index[i]] = cartProducts[i];
+                    }
+                    // console.log(JSON.stringify(jsonCart)+ 'cartlist');
+                }
+                if(wishList.length){
+                    let index = [];
+                    for(let i=0; i < wishList.length; i++){
+                        index.push(i);
+                    }
+                    for(let i=0; i < wishList.length; i++){
+                        jsonWishList[index[i]] = wishList[i];
+                    }
+                    // console.log(JSON.stringify(jsonWishList)+ 'wishlist');
+                }
+                const sentData = await fetch('http://localhost:5000/userdata/',
+                {
+                    method: 'POST',
+                    headers: {'Content-type': 'application/json'},
+                    body: JSON.stringify(data)
+                }
+                );
+                if(sentData.ok){
+                    const response = await sentData.json();
+                    console.log(response)
+                }
+            }
+        }
+        saveData()
+    }, [cartProducts, wishList])
+    
   return (
     <div className='preview-page'>
         <Nav />

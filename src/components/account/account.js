@@ -2,7 +2,7 @@ import'./account.css';
 import Nav from '../Nav/nav';
 import Footer from '../footer/footer';
 import { useSelector, useDispatch } from 'react-redux';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import {updateSomeUser, updateUser, changeSignedInState, removeFromWishList} from '../store/accountSlice';
 import { changePreview } from '../store/cart';
 import {Link} from 'react-router-dom';
@@ -15,6 +15,7 @@ function Account() {
   const dispatch = useDispatch();
   const { email, name, surname} = useSelector(state => state.account.user);
   const {wishList} = useSelector(state => state.account);
+  const {cartProducts} = useSelector( state => state.cart);
   const [activeFuture, setActiveFuture] = useState();
   const [password, setPassword] = useState();
   const [futureEmail, setFutureEmail] = useState({state: false, value: ''});
@@ -146,7 +147,7 @@ function Account() {
     let subType;
     let similarProd = [];
     const randomNumbers = randos(id);
-    console.log(id, type, randomNumbers)
+    // console.log(id, type, randomNumbers)
     for(let i=0; i < 4; i++){
         let product = [];
         product.push(randomNumbers[i]+1);
@@ -175,6 +176,51 @@ function Account() {
     }
     dispatch(updateSimilar(similarProd));
   }
+  useEffect(()=> {
+    // console.log('it is working!')
+    const saveData = async()=> {
+        if(cartProducts.length || wishList.length){
+            let jsonCart = {};
+            let jsonWishList = {};
+            const data = {jsonCart: jsonCart,
+            jsonWishList: jsonWishList,
+            email: email};
+            // console.log(data)
+            if(cartProducts.length){
+                let index = [];
+                for(let i=0; i < cartProducts.length; i++){
+                    index.push(i);
+                }
+                for(let i=0; i < cartProducts.length; i++){
+                    jsonCart[index[i]] = cartProducts[i];
+                }
+                // console.log(JSON.stringify(jsonCart)+ 'cartlist');
+            }
+            if(wishList.length){
+                let index = [];
+                for(let i=0; i < wishList.length; i++){
+                    index.push(i);
+                }
+                for(let i=0; i < wishList.length; i++){
+                    jsonWishList[index[i]] = wishList[i];
+                }
+                // console.log(JSON.stringify(jsonWishList)+ 'wishlist');
+            }
+            const sentData = await fetch('http://localhost:5000/userdata/',
+            {
+                method: 'POST',
+                headers: {'Content-type': 'application/json'},
+                body: JSON.stringify(data)
+            }
+            );
+            if(sentData.ok){
+                const response = await sentData.json();
+                // console.log(response)
+            }
+        }
+    }
+    saveData()
+}, [cartProducts, wishList])
   return (
     <div className='Account' >
         <Nav />

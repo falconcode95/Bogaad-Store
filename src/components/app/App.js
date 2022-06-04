@@ -10,6 +10,8 @@ function App() {
   const changeToggeNBG = (e)=> {
     dispatch(toggleNBackground(toggleNavBG(e) === 'HOME' ? false : true));
   }
+  let item = localStorage.getItem('cartProducts')
+  console.log(JSON.parse(item));
   return (
     <div className={activePage ? 'App different-BG' : 'App'}>
       <Nav />

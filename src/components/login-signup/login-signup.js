@@ -1,8 +1,8 @@
 import'./login-signup.css';
 import {useState} from 'react';
 import {useSelector, useDispatch} from 'react-redux';
-import { changeSignedInState, updateUser } from '../store/accountSlice';
-import App from '../app/App'
+import { changeSignedInState, updateUser, overideWishList } from '../store/accountSlice';
+import { overideCart } from '../store/cart';
 import {Link} from 'react-router-dom';
 
 function Login() {
@@ -20,7 +20,6 @@ function Login() {
     const signupFormState = signupForm.every(item=> item);
     const {signedIn} = useSelector(state => state.account);
     const dispatch = useDispatch();
-    console.log(signedIn);
     let passwordWarning;
     if(password && !password.match(/[A-Z]/)){
         passwordWarning = 'Password must contain an Uppercase character'
@@ -45,10 +44,20 @@ function Login() {
                 }
                 );
                 if(sentData.ok){
-                    const response = await sentData.json()
-                    console.log(response);
+                    const response = await sentData.json();
+                    let cart = [];
+                    let wishList = [];
+                    for(let x in response.jsonCart){
+                        cart.push(response.jsonCart[x])
+                    }
+                    for(let x in response.jsonWishList){
+                        wishList.push(response.jsonWishList[x])
+                    }
+                    console.log(wishList, 'from server');
                     dispatch(changeSignedInState(true));
-                    dispatch(updateUser(response))
+                    dispatch(updateUser(response));
+                    dispatch(overideCart(cart))
+                    dispatch(overideWishList(wishList))
                 } else {
                     setSignInError(true)
                 }

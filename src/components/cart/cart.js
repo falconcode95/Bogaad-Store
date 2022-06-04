@@ -8,6 +8,8 @@ import {useEffect} from 'react';
 
 function Cart() {
     const { cartProducts } = useSelector(state => state.cart);
+    const {wishList} = useSelector( state => state.account);
+    const {email} = useSelector( state => state.account.user);
     console.log(cartProducts);
     const dispatch = useDispatch();
     const removeItem = (e)=> {
@@ -29,6 +31,50 @@ function Cart() {
     }
     const productPrice = cartProducts.map((item, index)=> item.price * item.amount);
     const subtotal = productPrice.reduce((prev, current)=> prev + current, 0);
+    useEffect(()=> {
+        const saveData = async()=> {
+            if(cartProducts.length || wishList.length){
+                let jsonCart = {};
+                let jsonWishList = {};
+                const data = {jsonCart: jsonCart,
+                jsonWishList: jsonWishList,
+                email: email};
+                console.log(data)
+                if(cartProducts.length){
+                    let index = [];
+                    for(let i=0; i < cartProducts.length; i++){
+                        index.push(i);
+                    }
+                    for(let i=0; i < cartProducts.length; i++){
+                        jsonCart[index[i]] = cartProducts[i];
+                    }
+                    // console.log(JSON.stringify(jsonCart)+ 'cartlist');
+                }
+                if(wishList.length){
+                    let index = [];
+                    for(let i=0; i < wishList.length; i++){
+                        index.push(i);
+                    }
+                    for(let i=0; i < wishList.length; i++){
+                        jsonWishList[index[i]] = wishList[i];
+                    }
+                    // console.log(JSON.stringify(jsonWishList)+ 'wishlist');
+                }
+                const sentData = await fetch('http://localhost:5000/userdata/',
+                {
+                    method: 'POST',
+                    headers: {'Content-type': 'application/json'},
+                    body: JSON.stringify(data)
+                }
+                );
+                if(sentData.ok){
+                    const response = await sentData.json();
+                    console.log(response)
+                }
+            }
+        }
+        saveData()
+    }, [cartProducts, wishList])
   return (
     <div className='cart-page'>
         <Nav />
