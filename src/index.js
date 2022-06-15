@@ -9,6 +9,9 @@ import Login from './components/login-signup/login-signup';
 import Account from './components/account/account';
 import { Provider } from 'react-redux';
 import { BrowserRouter, Route, Routes } from "react-router-dom";
+import Loading from './components/Stripe Related/loading';
+import Success from './components/Stripe Related/success';
+import Footer from './components/footer/footer';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
@@ -21,6 +24,8 @@ root.render(
             <Route path="/Cart" element = { <Cart />}/>
             <Route path="/Login" element = {<Login />} />
             <Route path="/account" element = {<Account />} />
+            <Route path="/loading" element = {<Loading />} />
+            <Route path="/success" element = {<Success />} />
           </Routes>
         </BrowserRouter>
       </Provider>

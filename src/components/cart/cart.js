@@ -1,22 +1,60 @@
 import'./cart.css';
 import Nav from '../Nav/nav';
 import Footer from '../footer/footer';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate} from 'react-router-dom';
 import {useDispatch, useSelector} from 'react-redux';
-import { deleteCart, incrimentAmount, decrimentAmount } from '../store/cart';
+import { deleteCart, incrimentAmount, decrimentAmount, overideCart } from '../store/cart';
+import { changeSignedInState, updateUser, overideWishList } from '../store/accountSlice';
+import { changeActivePage } from '../store/secondPageSlice';
 import {useEffect} from 'react';
 
 function Cart() {
     const { cartProducts } = useSelector(state => state.cart);
+    const navigate = useNavigate();
     const {wishList} = useSelector( state => state.account);
     const {email} = useSelector( state => state.account.user);
-    console.log(cartProducts);
+    const {signedIn} = useSelector(state => state.account);
     const dispatch = useDispatch();
+    useEffect(()=> {
+        dispatch(changeActivePage('CART'))
+      }, [])
     const removeItem = (e)=> {
         const id = parseInt(e.target.getAttribute('data-id'));
         console.log(id)
         dispatch(deleteCart(id));
     }
+    useEffect(()=> {
+        const tokenlogin = async()=> {
+            if(localStorage.getItem('jwt')){
+                const token = localStorage.getItem('jwt');
+                const sentData = await fetch('http://localhost:5000/shortcut/',
+                {
+                    method: 'GET',
+                    headers: {
+                        accessToken: `Bearer ${token}`
+                    }
+                }
+                );
+                if(sentData.ok){
+                    const response = await sentData.json();
+                    let cart = [];
+                    let wishList = [];
+                    for(let x in response.jsonCart){
+                        cart.push(response.jsonCart[x])
+                    }
+                    for(let x in response.jsonWishList){
+                        wishList.push(response.jsonWishList[x])
+                    }
+                    console.log(wishList, 'from server');
+                    dispatch(changeSignedInState(true));
+                    dispatch(updateUser(response));
+                    dispatch(overideCart(cart))
+                    dispatch(overideWishList(wishList))
+                }
+            }
+        }
+        tokenlogin()
+    }, [])
     useEffect(()=> {
         window.scrollTo(-200, 0)
     }, [])
@@ -75,32 +113,70 @@ function Cart() {
         }
         saveData()
     }, [cartProducts, wishList])
-  return (
+    const Checkout = async ()=> {
+      if(signedIn && cartProducts.length !== 0){  
+        navigate('/loading');      
+        let items = []
+        for(let x in cartProducts){
+            let item = {
+                price_data: {
+                    currency: 'usd',
+                    product_data: {
+                        name: cartProducts[x].type,
+                        description: cartProducts[x].subType,
+                        images: [`http://localhost:5000/products/${cartProducts[x].name}/${cartProducts[x].id}`]
+                    },
+                    unit_amount: cartProducts[x].price * 100
+                },
+                quantity: cartProducts[x].amount
+            }
+            items.push(item)
+        }
+        // console.log(items)
+        const sentData = await fetch('http://localhost:5000/payment', {
+            method: 'POST',
+            headers: {
+                'content-type': 'application/json'
+            },
+            body: JSON.stringify(items)
+        }
+        )
+        if(sentData.ok){
+            const response = await sentData.json();
+            window.location = response.url
+        }
+      } else {
+          alert('Please log in to Checkout')
+      }
+    }
+  return ( 
     <div className='cart-page'>
         <Nav />
         <div className='shopping-cart'>
+            {cartProducts.length === 0 && <h3 className='filler'>There are No items in the Cart!</h3> }
                 {cartProducts.map((item, index)=> {
                     return (
-                        <div className='cart-products-div'>
-                            <div className='cart-product'>
-                                <img src={`http://localhost:5000/products/${cartProducts[index].name}/${cartProducts[index].id}`} alt=""/>  
-                                <div className='product-details'>
-                                    <p><strong>Product:</strong> {cartProducts[index].type}</p>
-                                    <p><strong>Type:</strong> {cartProducts[index].subType} </p>
-                                    <p><strong>Size:</strong> {cartProducts[index].size}</p>
-                                    {/* <p><strong>Price:</strong>  $ {index+1}.00 </p> */}
+                        <div className='Cart-item'>
+                            <img src={`http://localhost:5000/products/${cartProducts[index].name}/${cartProducts[index].id}`} alt="" className='product-mobile'/>   {/*This image is for mobiles!!*/}
+                            <div className='cart-products-div'> 
+                                <div className='cart-product'>
+                                    <img src={`http://localhost:5000/products/${cartProducts[index].name}/${cartProducts[index].id}`} alt=""/>  
+                                    <div className='product-details'>
+                                        <p><strong>Product:</strong> {cartProducts[index].type}</p>
+                                        <p><strong>Type:</strong> {cartProducts[index].subType} </p>
+                                        <p><strong>Size:</strong> {cartProducts[index].size}</p>
+                                    </div>
                                 </div>
-                            </div>
-                            <div className='buy-details'>
-                                <div className='cart-add-delete'>
-                                    <h3 className='clickable' data-id={index} onClick={decrement}>-</h3>
-                                    <h3 className='cart-number'>{cartProducts[index].amount} </h3>
-                                    <h3 className='clickable' data-id={index} onClick={increment}>+</h3>
-                                    {/* <img src={require('../../Projects Images/close.png')} alt="" className='close'/> */}
+                                <div className='buy-details'>
+                                    <div className='cart-add-delete'>
+                                        <h3 className='clickable' data-id={index} onClick={decrement}>-</h3>
+                                        <h3 className='cart-number'>{cartProducts[index].amount} </h3>
+                                        <h3 className='clickable' data-id={index} onClick={increment}>+</h3>
+                                    </div>
+                                    <h2>$ {cartProducts[index].price * cartProducts[index].amount}.00</h2>
                                 </div>
-                                <h2>$ {cartProducts[index].price * cartProducts[index].amount}.00</h2>
+                                <h4 className='cancel clickable' data-id={index} onClick={removeItem}>Remove Item</h4>
                             </div>
-                            <h4 className='cancel clickable' data-id={index} onClick={removeItem}>Remove Item</h4>
                         </div>
                     )
                 })}
@@ -115,13 +191,13 @@ function Cart() {
                     <p className='total-title'>Total</p>
                 </div>
                 <div >
-                    <p>$ {subtotal}</p>
-                    <p>$ 5</p>
-                    <p>$ {subtotal <= 5 ? 0 : 5}</p>
-                    <p className='total-title'>$ {subtotal <= 5 ? subtotal+5 : subtotal}</p>
+                    <p>$ {subtotal}.00</p>
+                    <p>$ -</p>
+                    <p>$ -</p>
+                    <p className='total-title'>$ {subtotal}.00</p>
                 </div>
             </div>
-            <button>Checkout</button>
+            <button onClick={Checkout}>Checkout</button>
             <Link to='/Shop'><button>Continue Shopping</button></Link> 
         </div>
         <Footer />

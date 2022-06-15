@@ -11,20 +11,7 @@
     background-image: url('../../Projects Images/testBG.jpg');
 }
 
-.landing-page-text {
-    width: 50%;
-    /* border: 1px solid red; */
-    position: absolute;
-    right: 15%;
-    height: 100vh;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-}
-
 .about-us-paragraph {
-    /* border: 1px solid red; */
     padding-left: 17%;
     font-style: italic;
     font-weight: 700;
@@ -51,7 +38,59 @@ button {
     font-size: 1rem;
     color: white;
     padding:  0.5em 1em;
-    border-radius: 3%;
+    border-radius: 1%;
     margin-top: 1rem;
     cursor: pointer;
+    border: none
+}
+
+@media (min-width: 769px) and (max-width: 1057px) {
+    .landing-page-text {
+        color: rgb(0, 0, 0); 
+        width: 60%;
+        position: absolute;
+        top: 50%;
+        right: 0;
+        transform: translateY(-50%);
+        text-align: center;
+    }
+}
+
+@media (min-width: 1058px) {
+    .landing-page-text {
+        width: 50%;
+        position: absolute;
+        right: 15%;
+        height: 100vh;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+    }
+}
+
+@media (max-width: 768px) {
+    
+    .App {
+        background-image: url('../../Projects Images/overlay.jpg');
+        background-size: cover;
+        background-position: top 20% right 60%;
+        background-repeat: no-repeat;
+        height: 100vh;
+    }
+
+    .landing-page-text {
+        color: white;
+        width: 100%;
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        text-align: center;
+    }
+
+    button {
+        background-color: rgb(255, 255, 255);
+        font-weight: bold;
+        color: rgb(0, 0, 0);
+    }
 }

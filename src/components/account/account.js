@@ -2,9 +2,11 @@ import'./account.css';
 import Nav from '../Nav/nav';
 import Footer from '../footer/footer';
 import { useSelector, useDispatch } from 'react-redux';
-import { useState, useEffect } from 'react';
-import {updateSomeUser, updateUser, changeSignedInState, removeFromWishList} from '../store/accountSlice';
-import { changePreview } from '../store/cart';
+import { useState, useEffect, useRef } from 'react';
+import {updateSomeUser, updateUser, changeSignedInState, removeFromWishList, 
+  overideWishList, changeActiveSection} from '../store/accountSlice';
+import { changeActivePage } from '../store/secondPageSlice';
+import { changePreview, overideCart, clearCart } from '../store/cart';
 import {Link} from 'react-router-dom';
 import data from '../../Data and Functions/data';
 import {randos} from '../../Data and Functions/functions';
@@ -21,11 +23,22 @@ function Account() {
   const [futureEmail, setFutureEmail] = useState({state: false, value: ''});
   const [futurePassword, setFuturePassword] = useState( {state: false, value: ''});
   const [retypeFuturePassword, setRetypeFuturePassword] = useState()
-  const [futureName, setFutureName] = useState( {state: false, value: ''});
+  const [futureName, setFutureName] = useState( {state: false, value: ''}); 
   const [futureSurname, setFutureSurname] = useState( {state: false, value: ''});
   const [changeActive, setChangeActive] = useState(false);
   const [passwordWarning, setPasswordWarning] = useState(false);
-  const [activeSection, setActiveSection] = useState('account');
+  const {activeSection} = useSelector(state => state.account);
+  const array = ['C', 'A', 'T', 'E', 'G', 'O', 'R', 'Y'];
+  const accountCategory = useRef();
+  const leftSide = useRef();
+  const [screen, setScreen] = useState(window.screen.width);
+  window.addEventListener('resize', ()=> {
+    setScreen(window.screen.width);
+    console.log('ya horeyo')
+  })
+  useEffect(()=> {
+    dispatch(changeActivePage('ACCOUNT'));
+  }, [])
   const {accessories, accessoryType, shirts, shirtTypes, trousers, trouserTypes, shoes, shoeType} = data;
   const changeActiveState = async(e)=> {
     if(e.target.getAttribute('data-type')){
@@ -100,16 +113,60 @@ function Account() {
       setRetypeFuturePassword(e.target.value);
     }
   }
+  useEffect(()=> {
+    console.log('activated')
+    if(screen > 768) {
+      leftSide.current.style.display = 'block';
+    } else {
+      leftSide.current.style.display = 'none';
+    }
+  }, [screen])
   const changeSection = (e)=> {
     const element = e.target.innerHTML;
+    if(screen < 769){
+      leftSide.current.style.display = 'none';
+      accountCategory.current.style.display = 'block';
+    }
     if(element === 'Account'){
-      setActiveSection('account')
+      dispatch(changeActiveSection('account'))
     } else if(element === 'Wish List'){
-      setActiveSection('wishlist')
+      dispatch(changeActiveSection('wishlist'))
     } else {
-      setActiveSection('delete-account')
+      dispatch(changeActiveSection('delete-account'))
     }
   }
+  useEffect(()=> {
+    const tokenlogin = async()=> {
+        if(localStorage.getItem('jwt')){
+            const token = localStorage.getItem('jwt');
+            const sentData = await fetch('http://localhost:5000/shortcut/',
+            {
+                method: 'GET',
+                headers: {
+                    accessToken: `Bearer ${token}`
+                }
+            }
+            );
+            if(sentData.ok){
+                const response = await sentData.json();
+                let cart = [];
+                let wishList = [];
+                for(let x in response.jsonCart){
+                    cart.push(response.jsonCart[x])
+                }
+                for(let x in response.jsonWishList){
+                    wishList.push(response.jsonWishList[x])
+                }
+                console.log(wishList, 'from server');
+                dispatch(changeSignedInState(true));
+                dispatch(updateUser(response));
+                dispatch(overideCart(cart))
+                dispatch(overideWishList(wishList))
+            }
+        }
+    }
+    tokenlogin()
+}, [])
   const clearUser = async(e)=> {
     if(e.target.getAttribute('data-id')){
       const deleteUser = {email: email, password: password};
@@ -122,14 +179,19 @@ function Account() {
         
       );
       if(sentData.ok){
+        console.log('user cleared')
         const clear = {email: '', name: '', surname: ''}
+        localStorage.removeItem('jwt');
         dispatch(changeSignedInState(false));
         dispatch(updateUser(clear));
+        dispatch(clearCart());
       }
     } else {
       const clear = {email: '', name: '', surname: ''}
+      localStorage.removeItem('jwt');
       dispatch(changeSignedInState(false));
       dispatch(updateUser(clear));
+      dispatch(clearCart());
     }
   }
   const removeFromWish = (e)=> {
@@ -220,12 +282,26 @@ function Account() {
         }
     }
     saveData()
-}, [cartProducts, wishList])
+}, [cartProducts, wishList]) ;
+  const showDetails = (e) => {
+    let element = e.target.getAttribute('data-id');
+    if(element === 'account-category'){
+      leftSide.current.style.display = 'block';
+      accountCategory.current.style.display = 'none';
+    }
+  }
   return (
     <div className='Account' >
         <Nav />
+        {screen < 769 && 
+          <div className='Account-category' ref={accountCategory} data-id="account-category" onClick={showDetails}>
+            {array.map(item => {
+              return <p data-id="account-category">{item}</p>
+            })}
+          </div>
+        }
         <div className='account-details'>
-            <div className='left-side'>
+            <div className='left-side' ref={leftSide}>
                 <p onClick={changeSection}>Account</p>
                 <p onClick={changeSection}>Wish List</p>
                 <Link to="/"><p onClick={clearUser}>Sign Out</p></Link>
@@ -298,11 +374,11 @@ function Account() {
               {activeSection === 'delete-account' &&
               <div className='delete-account'>
                 <p>Are you sure you want to delete your account with us?</p>
-                <div>
+                <div className='are-you-sure'>
                   <label>password:</label>
                   <input type="password" data-id='current-password' onChange={updateInput}/>
+                  <Link to="/"><button onClick={clearUser} data-id="delete">Delete Account</button></Link>
                 </div>
-                <Link to="/"><button onClick={clearUser} data-id="delete">Delete Account</button></Link>
               </div>
               }
             </div>

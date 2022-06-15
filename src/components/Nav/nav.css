@@ -1,72 +1,190 @@
-nav nav, nav .nav-links, nav .cart {
-    display: flex;
-}
-
-a {
-    text-decoration: none;
-    color: black;
-}
-
 nav {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    position: fixed;
-    top: 0;
-    padding: 0em 2em;
-    width: 100%;
-    /* border: 1px solid; */
-    z-index: 1;
+    font-size: 16px;
+    z-index: 20;
 }
 
-.nav-background {
-    background-color: white;
+@media (min-width: 769px) {
+
+    nav .bagmobile, nav .burger, nav .burger-details {
+        display: none;
+    }
+    
+    
+    nav nav, nav .nav-links, nav .cart {
+        display: flex;
+    }
+    
+    a {
+        text-decoration: none;
+        color: black;
+    }
+    
+    nav {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        position: fixed;
+        top: 0;
+        padding: 0em 2em;
+        width: 100%;
+        z-index: 1;
+    }
+    
+    .nav-background {
+        background-color: white;
+    }
+    
+    nav h3 {
+        font-family: 'Oleo Script Swash Caps', cursive;
+        font-size: 2.5rem;
+        color: rgb(44, 44, 44);
+    }
+    
+    nav > * {
+        width: 30%;
+    }
+    
+    .nav-links {
+        justify-content: center;
+    }
+    
+    nav .cart {
+        justify-content: flex-end;
+    }
+    
+    .nav-links > *, nav .cart > *{
+        margin-inline: 1rem;
+    }
+    
+    nav img {
+        max-width: 1.7vmax;
+    }
+    
+    nav .bag {
+        display: flex;
+        position: relative;
+    }
+    
+    nav .bag img {
+        margin-right: 0.3em;
+    }
+    
+    nav .bag h6 {
+        position: absolute;
+        background-color: rgb(253, 76, 76);
+        width: 60%;
+        height: 60%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border-radius: 50%;
+        right: 0;
+    }
 }
 
-nav h3 {
-    font-family: 'Oleo Script Swash Caps', cursive;
-    font-size: 2.5rem;
-    color: rgb(44, 44, 44);
+@media (max-width: 768px){
+
+    nav .nav-links, nav .cart {
+        display: none;
+    }
+
+    nav .nav-background {
+        background-color: white;
+    }
+
+    nav {
+        display: flex;
+        position: fixed;
+        width: 100%;
+        justify-content: space-between;
+        align-items: center;
+        padding: 1em;
+    }
+
+    nav h3 {
+        font-family: 'Oleo Script Swash Caps', cursive;
+        font-size: 2.2em;
+    }
+
+    nav .bagmobile {
+        position: relative;
+    }
+
+    nav .bagmobile img {
+        max-width: 5vmax;
+    }
+
+    nav .bagmobile h6 {
+        position: absolute;
+        right: 0;
+        top: -20%;
+        color: rgb(235, 65, 65);
+        font-size: 1em;
+    }
+
+    nav .burger {
+        max-width: 5vmax;
+        z-index: 2;
+    }
+
+    nav .close {
+        max-width: 3vmax;
+        display: none;
+    }
+
+    nav .burger-details {
+        position: absolute;
+        display: none;
+        top: 0;
+        right: 0;
+        padding: 4em 1em;
+        height: 100vh;
+        background-color: white;
+    }
+
+    a {
+        text-decoration: none;
+        color: black;
+    }
+
 }
 
-nav > * {
-    /* border: 1px solid; */
-    width: 30%;
+@media (min-width: 769px) and (max-width: 1275px) {
+
+    nav > * > * {
+        /* border: 1px solid */
+    }
+    nav > * {
+        /* border: 1px solid red */
+    }
+    nav {
+        font-size: 0.875em;
+    }
+
+    nav .nav-links > *{
+        margin-inline: 0.5rem;
+    }
+
+    nav .nav-links {
+        width: 40%;
+    }
+
+    nav .cart {
+        width: 20%;
+    }
+
+    nav .user-name {
+        font-size: 0.875em;
+        /* border: 1px solid */
+    }
+
+    nav .cart > * {
+        margin-left: 0.1rem
+    }
 }
 
-.nav-links, nav .cart {
-    justify-content: center;
-}
-
-nav .cart {
-    justify-content: flex-end;
-}
-
-.nav-links > *, nav .cart > *{
-    margin-inline: 1rem;
-}
-
-nav img {
-    max-width: 1.7vmax;
-}
-
-nav .bag {
-    display: flex;
-    position: relative;
-}
-
-nav .bag img {
-    margin-right: 0.3em;
-}
-
-nav .bag h6 {
-    position: absolute;
-    background-color: rgb(253, 76, 76);
-    width: 60%;
-    height: 60%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    border-radius: 50%;
-    right: 0;
+@media (min-width: 768px) and (max-width: 895px) {
+    nav .cart {
+        width: 30%;
+    }
 }

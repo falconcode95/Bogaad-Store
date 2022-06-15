@@ -1,12 +1,13 @@
 import'./login-signup.css';
-import {useState} from 'react';
+import {useEffect, useState} from 'react';
 import {useSelector, useDispatch} from 'react-redux';
 import { changeSignedInState, updateUser, overideWishList } from '../store/accountSlice';
 import { overideCart } from '../store/cart';
-import {Link} from 'react-router-dom';
+import {Link, useNavigate} from 'react-router-dom';
 
 function Login() {
     const [signup, setSignup] = useState(false);
+    const navigate = useNavigate();
     const [newUser, setNewUser] = useState(false);
     const [signInError, setSignInError] = useState(false)
     const [email, setEmail] = useState();
@@ -45,19 +46,20 @@ function Login() {
                 );
                 if(sentData.ok){
                     const response = await sentData.json();
+                    localStorage.setItem('jwt', response.accessToken)
                     let cart = [];
                     let wishList = [];
                     for(let x in response.jsonCart){
-                        cart.push(response.jsonCart[x])
+                        cart.push(response.jsonCart[x]) 
                     }
                     for(let x in response.jsonWishList){
                         wishList.push(response.jsonWishList[x])
                     }
-                    console.log(wishList, 'from server');
                     dispatch(changeSignedInState(true));
                     dispatch(updateUser(response));
                     dispatch(overideCart(cart))
                     dispatch(overideWishList(wishList))
+                    navigate("/")
                 } else {
                     setSignInError(true)
                 }
@@ -114,7 +116,6 @@ function Login() {
             setSignup(true)
         }
     } 
-//   return signedIn ? ( <div><App /></div>) : 
   return   (
     <div className='login'>
         {!signup ? 
@@ -127,7 +128,7 @@ function Login() {
                 <input type="password" placeholder='*******' onChange={handleInput} value={password}/>
                 <p>{(!email || !password) && 'Please fill all the blank spaces'}</p>
                 <p>{signInError && 'Email or Password is incorrect'}</p>
-                <Link to={signedIn ? "/" : "/Login"}><button className='login-button' onClick={userInfo} >Log In</button></Link>
+                <button className='login-button' onClick={userInfo} >Log In</button>
                 <p>Dont have an account? <span onClick={changeSign} className="redirect">Sign Up</span></p>
             </div> : 
             <div className='login-part signup-part'>

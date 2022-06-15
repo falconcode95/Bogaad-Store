@@ -1,7 +1,7 @@
 .Account .account-details {
     display: flex;
     padding: 10% 3% 0 3%;
-    /* border: 1px solid */
+    position: relative;
 }
 
 .Account .account-details > * {
@@ -66,7 +66,7 @@
 }
 
 .Account .account-details .left-side {
-    width: 17%;
+    width: 20%;
 }
 
 .Account .change-details {
@@ -101,6 +101,7 @@
 }
 
 .Account .delete-account button {
+    display: block;
     position: relative;
     left: 50%;
     transform: translateX(-50%);
@@ -108,4 +109,74 @@
 
 .Account .remove-item, .Account label, .Account .account-details .left-side > * {
     cursor: pointer;
+}
+
+.Account .delete-account {
+    position: relative;
+    width: 50%;
+}
+
+@media (max-width: 768px) {
+
+    .Account .delete-account {
+        width: 100%;
+        padding-left: 1rem;
+    }
+
+    
+    .Account .delete-account button {
+        background-color: rgb(0, 0, 0);
+        color: white;
+    }
+
+    .Account .wishlist {
+        flex-direction: column;
+    }
+
+    .Account .wishlist > * {
+        width: 100%;
+    }
+
+    .Account .wishlist > * > * > *{
+        width: 100%;
+    }
+
+    .Account .account-details {
+        padding-top: 15%;
+        margin-left: 1.5rem;
+    }
+
+    .Account .account-details .left-side {
+        width: 30%;
+        position: fixed;
+        height: 100vh;
+        top: 0;
+        left: 0;
+        padding: 5rem 1rem 0 1rem;
+        background-color: rgb(255, 255, 255);
+        z-index: 5;
+    }
+
+    .Account .Account-category {
+        position: absolute;
+        margin-top: 15%;
+        padding: 0.7em;
+        background-color: black;
+        color: white;
+    }
+}
+
+@media (min-width: 769px) and (max-width: 995px) {
+
+    .Account .wishlist > * {
+        width: 40%;
+    }
+
+    .Account .wishlist > * > * > *{
+        width: 100%;
+    }
+
+    .Account .account-details .left-side {
+        width: 25%;
+    }
 }

@@ -3,8 +3,9 @@ import Nav from '../Nav/nav';
 import Footer from '../footer/footer';
 import { Link } from 'react-router-dom';
 import { useDispatch, useSelector} from 'react-redux'
-import { updateSimilar, updateCart, changePreview} from '../store/cart';
-import { addToWishList } from '../store/accountSlice';
+import { updateSimilar, updateCart, changePreview, overideCart} from '../store/cart';
+import { changeSignedInState, updateUser, overideWishList, addToWishList } from '../store/accountSlice';
+import { changeActivePage } from '../store/secondPageSlice';
 import {useEffect, useState} from 'react';
 
 function Preview() {
@@ -16,7 +17,7 @@ function Preview() {
     const [activeCategory, setActiveCategory] = useState();
     const [sizeToBeUsed, setSizeToBeUsed] = useState([])
     const shirtSize = ['M', 'L', 'XL', 'S']
-    const shoeSize = [7,8,9,10];
+    const shoeSize = [7,8,9,10]; 
     const trouserSize = [32,34,36,40];
     const generalSize = ['Small', 'Medium', 'Large'];
     const changeSize = (e)=> {
@@ -34,6 +35,9 @@ function Preview() {
     const sizeTable = [ {SIZE: ['M', 'L', 'XL', 'S'], BUST: [88, 88, 96, 86], WAIST: [80, 76, 80, 78], HIPS: [86, 84, 86, 84], LENGTH: [60, 61, 62, 58]}];
     const sizeTableKeys = Object.keys(sizeTable[0]);
     const oneToFour = ['1','2','3', '4'];
+    useEffect(()=> {
+        dispatch(changeActivePage('PREVIEW'))
+      }, [])
     const addToCart = ()=> {
         if(!size){
             alert('choose a size first')
@@ -45,6 +49,38 @@ function Preview() {
             setSize('');
         }
     }
+    useEffect(()=> {
+        const tokenlogin = async()=> {
+            if(localStorage.getItem('jwt')){
+                const token = localStorage.getItem('jwt');
+                const sentData = await fetch('http://localhost:5000/shortcut/',
+                {
+                    method: 'GET',
+                    headers: {
+                        accessToken: `Bearer ${token}`
+                    }
+                }
+                );
+                if(sentData.ok){
+                    const response = await sentData.json();
+                    let cart = [];
+                    let wishList = [];
+                    for(let x in response.jsonCart){
+                        cart.push(response.jsonCart[x])
+                    }
+                    for(let x in response.jsonWishList){
+                        wishList.push(response.jsonWishList[x])
+                    }
+                    console.log(wishList, 'from server');
+                    dispatch(changeSignedInState(true));
+                    dispatch(updateUser(response));
+                    dispatch(overideCart(cart))
+                    dispatch(overideWishList(wishList))
+                }
+            }
+        }
+        tokenlogin()
+    }, [])
     useEffect(()=> {
         window.scrollTo(-200, 0);
     }, [])
@@ -77,7 +113,7 @@ function Preview() {
         window.scrollTo(-200, 0)
     }
     const addToWishlist = ()=> {
-        dispatch(addToWishList(previewProduct))
+        dispatch(addToWishList(localPreviewProduct))
     }
     useEffect(()=> {
         console.log('update wish active')
@@ -124,19 +160,29 @@ function Preview() {
         }
         saveData()
     }, [cartProducts, wishList])
+    const localPreviewProduct = JSON.parse(localStorage.getItem('previewProduct'));
+    const localSimilarProducts = JSON.parse(localStorage.getItem('similarProducts'));
+    useEffect(()=>{
+        if(localPreviewProduct){
+            let product1 = [localPreviewProduct.id, localPreviewProduct.name,  localPreviewProduct.type,
+                localPreviewProduct.subType, localPreviewProduct.price];
+            dispatch(changePreview(product1));
+            dispatch(updateSimilar(localSimilarProducts));
+        }
+    }, [])
     
   return (
-    <div className='preview-page'>
+    <div className='preview-page'> 
         <Nav />
         <div className='preview-div'>
             <div className='actual-preview'>
                 <div className='product'>
-                 <img src={`http://localhost:5000/products/${previewProduct.name}/${previewProduct.id}`} alt="" className='product-preview'/>
+                 <img src={`http://localhost:5000/products/${localPreviewProduct.name}/${localPreviewProduct.id}`} alt="" className='product-preview'/>
                 </div>
                 <div className='product-details'>
-                    <h1>{previewProduct.type} </h1>
-                    <p>{previewProduct.subType} </p>
-                    <h3 className='price'> $ {previewProduct.price}.00</h3>
+                    <h1>{localPreviewProduct.type} </h1>
+                    <p>{localPreviewProduct.subType} </p>
+                    <h3 className='price'> $ {localPreviewProduct.price}.00</h3>
                     <h3>Choose Your Size</h3>
                     <div className='actual-sizes'>
                         {sizeToBeUsed.map((size)=> {
@@ -178,11 +224,11 @@ function Preview() {
                     return (
                         <Link to='/Preview'>
                             <div onClick={updatePreview}>
-                                <img src={`http://localhost:5000/products/${similarProducts[0][1]}/${similarProducts[index][0]}`} alt="" data-type={similarProducts[0][1]}
-                                data-id={similarProducts[index][0]}/>  
-                                <p data-data={similarProducts[index][2]}>{similarProducts[index][2]} </p>
-                                <p data-data={similarProducts[index][3]}>{similarProducts[index][3]}</p>
-                                <p data-data={similarProducts[index][4]}>$ {similarProducts[index][4]}.00</p>
+                                <img src={`http://localhost:5000/products/${localSimilarProducts[0][1]}/${localSimilarProducts[index][0]}`} alt="" data-type={localSimilarProducts[0][1]}
+                                data-id={localSimilarProducts[index][0]} className="similar-product-img"/>  
+                                <h4 data-data={localSimilarProducts[index][2]}>{localSimilarProducts[index][2]} </h4>
+                                <p data-data={localSimilarProducts[index][3]}>{localSimilarProducts[index][3]}</p>
+                                <p data-data={localSimilarProducts[index][4]}>$ {localSimilarProducts[index][4]}.00</p>
                             </div>
                         </Link>
                     )

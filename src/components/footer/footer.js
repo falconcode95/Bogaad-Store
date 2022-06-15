@@ -1,13 +1,21 @@
 import'./footer.css';
-import { useRef, useEffect } from 'react';
-import { toggleFooterIntersection } from "../store/secondPageSlice";
+import { useRef, useEffect, useState } from 'react';
+import { toggleFooterIntersection } from "../store/secondPageSlice"; 
+import { changeActiveSection, signedIn } from '../store/accountSlice';
 import { useDispatch, useSelector } from 'react-redux';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
-function Footer(props) {
+function Footer() {
     const aboutUs = useRef();
+    const navigate = useNavigate()
+    const {signedIn} = useSelector(state => state.account);
+    const [subscribtion, setSubscription] = useState(false);
+    const {activePage} = useSelector(state => state.shop);
+    const [subscribtionEmail, setSubscriptionEmail] = useState();
     const {footerIntersecting} = useSelector((state)=> state.shop);
     const dispatch = useDispatch();
+    const footer = useRef()
+    const screen = window.screen.width;
     const observer = new IntersectionObserver((enteries)=> {
         if(enteries[0].isIntersecting){
             dispatch(toggleFooterIntersection(true));
@@ -15,32 +23,82 @@ function Footer(props) {
             dispatch(toggleFooterIntersection(false));
         }
     });
-    const footer = useRef();
+    const footerPadding = useRef();
     useEffect(()=> {
         observer.observe(footer.current);
     });
+    const scroll = (e)=> {
+        if(signedIn){        
+            window.scrollTo(-200, 0);
+            if(e.target.innerHTML === 'My Account'){
+                dispatch(changeActiveSection('account'))
+            } else if(e.target.innerHTML === 'My Wishlist'){
+                dispatch(changeActiveSection('wishlist'));
+            }
+        }
+        else if(e.target.innerHTML === 'My Cart') {
+            window.scrollTo(-200, 0);
+            navigate('/Cart')
+        } else {
+            alert('Please log in to see account details')
+        }
+    }
+    const subsEmail = (e)=> {
+        setSubscriptionEmail(e.target.value)
+    }
+    const changeSubscription = (e)=> {
+        if(subscribtionEmail){
+          if(e.target.innerHTML === 'OKAY'){
+            setSubscription(false);
+            setSubscriptionEmail('')
+          } else {
+            setSubscription(true);
+          }
+      }
+    }
+    useEffect(()=> {
+        console.log(activePage)
+        if(activePage !== 'SHOP' && screen < 769){
+            console.log('working!')
+            footerPadding.current.style.paddingInline = '1em';
+        } else if(activePage === 'SHOP' && screen < 769){
+            footerPadding.current.style.paddingInline = '3em 1em';
+        }
+    })
   return (
-    <div>
+    <div className='Footer'>
         <div className='newsletter'>
-            <h1>Dont Miss any New Products!</h1>
-            <input type="text" placeholder='Enter Your E-mail Address'></input>
-            <button>Sign Up for Newsletter</button>
+            {subscribtion ? 
+             <div>
+                 <h3>Thanks for Subscribing, we will keep you updated of any new products!</h3>
+                 <button onClick={changeSubscription}>OKAY</button>
+             </div> :
+             <div>
+                <h1>Dont Miss any New Products!</h1>
+                <input type="email" placeholder='Enter Your E-mail Address' onChange={subsEmail} value={subscribtionEmail}></input>
+                <button onClick={changeSubscription}>Sign Up for Newsletter</button>
+             </div>
+            }
         </div>
-        <div className='footer'>
+        <div className='footer' ref={footerPadding}>
             <div>
                 <h3 >Usefull Links</h3>
-                <h5 className='links'>FAQ</h5>
-                <h5 className='links'>Terms of Use</h5>
-                <h5 className='links'>Track Order</h5>
-                <h5 className='links'>Shipping</h5>
-                <h5 className='links'>Cancelation</h5>
-                <h5 className='links'>Returns</h5>
+                <div className='footer-details'>
+                    <h5 className='links'>FAQ</h5>
+                    <h5 className='links'>Terms of Use</h5>
+                    <h5 className='links'>Track Order</h5>
+                    <h5 className='links'>Shipping</h5>
+                    <h5 className='links'>Cancelation</h5>
+                    <h5 className='links'>Returns</h5>
+                </div>
             </div>
             <div>
-                <Link to="/account"><h3>Account</h3></Link>
-                <h5  ref={footer} className='links'>My Account</h5>
-                <h5 className='links'>My Cart</h5>
-                <h5 className='links'>My Wishlist</h5> 
+                <Link to={signedIn ? "/account" : ""}><h3 onClick={scroll}>Account</h3></Link>
+                <div className='footer-details'>
+                    <Link to={signedIn ? "/account" : ""}><h5  ref={footer} onClick={scroll} className='links'>My Account</h5></Link>
+                    <h5 onClick={scroll} className='links'>My Cart</h5>
+                    <Link to={signedIn ? "/account" : ""}><h5 onClick={scroll} className='links'>My Wishlist</h5> </Link>
+                </div>
             </div>
             <div className='about-us' ref={aboutUs}>
                 <h3>About Us</h3>  
@@ -75,4 +133,4 @@ function Footer(props) {
   );
 }
 
-export default Footer;
+export default Footer; 

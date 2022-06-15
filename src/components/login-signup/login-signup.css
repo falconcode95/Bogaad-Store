@@ -55,7 +55,7 @@ html {
     top: -14%;
     left: 50%;
     transform: translateX(-50%);
-    max-width: 5vmax;
+    max-width: 25%;
     border-radius: 50%;
     background-color: rgb(236, 10, 10);
     padding: 0.5rem;
@@ -84,4 +84,8 @@ html {
 .login .redirect {
     text-decoration: underline;
     cursor: pointer;
+}
+
+.login .login-button {
+    color: rgb(247, 247, 247)
 }
