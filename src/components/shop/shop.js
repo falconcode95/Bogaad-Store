@@ -15,9 +15,12 @@ function Shop() {
     const { filterBy} = useSelector((state)=> state.shop);
     const {activePage} = useSelector(state => state.shop);
     const {footerIntersecting} = useSelector((state)=> state.shop);
+    const dispatch = useDispatch();
     const categoryRef = useRef();
     const sideMenu = useRef();
     const array = ['C', 'a', 't', 'e', 'g', 'o', 'r', 'i', 'e', 's'];
+    const {productImages} = useSelector(state => state.shop);
+    console.log(productImages.shirts)
     useEffect(()=> {
         dispatch(changeActivePage('SHOP'))
       }, [])
@@ -25,7 +28,7 @@ function Shop() {
         const tokenlogin = async()=> {
             if(localStorage.getItem('jwt')){
                 const token = localStorage.getItem('jwt');
-                const sentData = await fetch('http://localhost:5000/shortcut/',
+                const sentData = await fetch('https://bogaad-store.herokuapp.com/shortcut/',
                 {
                     method: 'GET',
                     headers: {
@@ -68,7 +71,6 @@ function Shop() {
     useEffect(()=> {
         window.scrollTo(-200, 0)
     }, [])
-    const dispatch = useDispatch();
     const oneToEight = ['1','2','3', '4', '5', '6', '7', '8'];
     const {accessories, accessoryType, shirts, shirtTypes, trousers, trouserTypes, shoes, shoeType} = data;
     const changeCategory = (e)=> {
@@ -88,21 +90,30 @@ function Shop() {
         const type = e.target.getAttribute('data-type');
         let name;
         let subType;
+        let typeNumber;
         if(type === 'shirts'){
             name= shirts[id-1];
-            subType = shirtTypes[id-1]
+            subType = shirtTypes[id-1];
+            typeNumber = 0
         } else if(type === 'trousers'){
             name= trousers[id-1];
-            subType = trouserTypes[id-1]
+            subType = trouserTypes[id-1];
+            typeNumber = 1
         } else if(type === 'shoes'){
             name= shoes[id-1];
-            subType = shoeType[id-1]
+            subType = shoeType[id-1];
+            typeNumber = 2
         } else {
             name = accessories[id-1];
-            subType = accessoryType[id-1]
+            subType = accessoryType[id-1];
+            typeNumber = 3
         }
         const price = parseInt(id);
+        const imageData = {typeNumber: typeNumber, id: price}
         const product = [id, type, name, subType, price];
+        // product.image = imageData;
+        // console.log(typeNumber, name)
+        console.log(product, 'from shop');
         dispatch(changePreview(product));
         let similarProd = [];
         const randomNumbers = randos(id);
@@ -132,6 +143,7 @@ function Shop() {
             }
             similarProd.push(product);
         }
+        console.log(similarProd, 'similarprod')
         dispatch(updateSimilar(similarProd));
     }
     const showCategories = (e)=> {
@@ -182,7 +194,8 @@ function Shop() {
                     return ( 
                             ((category === 'All' || category === 'shirts') || (filterBy >= index+1 && filterBy-1 <=index+1)) && <Link to='/Preview'>
                                 <div className='product-folder' data-id={index+1} data-type='shirts' onClick={changePreviewProduct}>
-                                    <img src={`http://localhost:5000/products/shirts/${index+1}`} alt="" className='product' data-id={index+1} data-type='shirts'/>
+                                    <img src={productImages.shirts[index]} alt="" className='product' data-id={index+1} data-type='shirts'/>
+                                    {/* <img src={productImages[0][index]} alt="" className='product' data-id={index+1} data-type='shirts'/> */}
                                     <h4 data-id={index+1} data-type='shirts'>{shirts[index]}</h4>
                                     <p data-id={index+1} data-type='shirts'>{shirtTypes[index]}</p>
                                     <p data-id={index+1} data-type='shirts'>$ {index+1}.00</p>
@@ -194,7 +207,8 @@ function Shop() {
                     return ( 
                             ((category === 'All' || category === 'trousers') || (filterBy >= index+1 && filterBy-1 <=index+1)) && <Link to='/Preview'>
                                 <div className='product-folder' data-id={index+1} data-type='trousers' onClick={changePreviewProduct}>
-                                    <img src={`http://localhost:5000/products/trousers/${index+1}`} data-id={index+1} data-type='trousers' alt="" className='product'/>
+                                    <img src={productImages.trousers[index]} data-id={index+1} data-type='trousers' alt="" className='product'/>
+                                    {/* <img src={productImages[1][index]} alt="" className='product' data-id={index+1} data-type='shirts'/> */}
                                     <h4 data-id={index+1} data-type='trousers'>{trousers[index]}</h4>
                                     <p data-id={index+1} data-type='trousers'>{trouserTypes[index]}</p>
                                     <p data-id={index+1} data-type='trousers'>$ {index+1}.00</p>
@@ -206,7 +220,8 @@ function Shop() {
                     return ( 
                             ((category === 'All' || category === 'shoes') || (filterBy >= index+1 && filterBy-1 <=index+1)) && <Link to='/Preview'>
                                 <div className='product-folder' data-id={index+1} data-type='shoes' onClick={changePreviewProduct}>
-                                    <img src={`http://localhost:5000/products/shoes/${index+1}`} data-id={index+1} data-type='shoes' alt="" className='product'/>
+                                    <img src={productImages.shoes[index]} data-id={index+1} data-type='shoes' alt="" className='product'/>
+                                    {/* <img src={productImages[2][index]} alt="" className='product' data-id={index+1} data-type='shirts'/> */}
                                     <h4 data-id={index+1} data-type='shoes'>{shoes[index]}</h4>
                                     <p data-id={index+1} data-type='shoes'>{shoeType[index]}</p>
                                     <p data-id={index+1} data-type='shoes'>$ {index+1}.00</p>
@@ -218,7 +233,8 @@ function Shop() {
                     return ( 
                             ((category === 'All' || category === 'accessories') || (filterBy >= index+1 && filterBy-1 <=index+1)) && <Link to='/Preview'>
                                 <div className='product-folder' data-id={index+1} data-type='accessories' onClick={changePreviewProduct}>
-                                    <img src={`http://localhost:5000/products/accessories/${index+1}`} data-id={index+1} data-type='accessories' alt="" className='product'/>
+                                    <img src={productImages.accessories[index]} data-id={index+1} data-type='accessories' alt="" className='product'/>
+                                    {/* <img src={productImages[3][index]} alt="" className='product' data-id={index+1} data-type='shirts'/> */}
                                     <h4 data-id={index+1} data-type='accessories'>{accessories[index]}</h4>
                                     <p data-id={index+1} data-type='accessories'>{accessoryType[index]}</p>
                                     <p data-id={index+1} data-type='accessories'>$ {index+1}.00</p>
@@ -232,4 +248,4 @@ function Shop() {
   );
 }
 
-export default Shop;
+export default Shop

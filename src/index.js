@@ -11,7 +11,6 @@ import { Provider } from 'react-redux';
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Loading from './components/Stripe Related/loading';
 import Success from './components/Stripe Related/success';
-import Footer from './components/footer/footer';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(

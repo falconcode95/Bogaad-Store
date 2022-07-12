@@ -12,6 +12,7 @@ function Preview() {
     // const {cartProducts} = useSelector(state => state.cart);
     const {wishList} = useSelector(state => state.account);
     const {email} = useSelector(state => state.account.user);
+    const {productImages} = useSelector( state => state.shop);
     const dispatch = useDispatch();
     const [size, setSize] = useState();
     const [activeCategory, setActiveCategory] = useState();
@@ -53,7 +54,7 @@ function Preview() {
         const tokenlogin = async()=> {
             if(localStorage.getItem('jwt')){
                 const token = localStorage.getItem('jwt');
-                const sentData = await fetch('http://localhost:5000/shortcut/',
+                const sentData = await fetch('https://bogaad-store.herokuapp.com/shortcut/',
                 {
                     method: 'GET',
                     headers: {
@@ -145,7 +146,7 @@ function Preview() {
                     }
                     // console.log(JSON.stringify(jsonWishList)+ 'wishlist');
                 }
-                const sentData = await fetch('http://localhost:5000/userdata/',
+                const sentData = await fetch('https://bogaad-store.herokuapp.com/userdata/',
                 {
                     method: 'POST',
                     headers: {'Content-type': 'application/json'},
@@ -170,14 +171,15 @@ function Preview() {
             dispatch(updateSimilar(localSimilarProducts));
         }
     }, [])
-    
+    console.log(localPreviewProduct);
   return (
     <div className='preview-page'> 
         <Nav />
         <div className='preview-div'>
             <div className='actual-preview'>
                 <div className='product'>
-                 <img src={`http://localhost:5000/products/${localPreviewProduct.name}/${localPreviewProduct.id}`} alt="" className='product-preview'/>
+                 {/* <img src={`http://localhost:5000/products/${localPreviewProduct.name}/${localPreviewProduct.id}`} alt="" className='product-preview'/> */}
+                 <img src={productImages[localPreviewProduct.name][localPreviewProduct.id-1]} alt="" className='product-preview'/>
                 </div>
                 <div className='product-details'>
                     <h1>{localPreviewProduct.type} </h1>
@@ -224,8 +226,10 @@ function Preview() {
                     return (
                         <Link to='/Preview'>
                             <div onClick={updatePreview}>
-                                <img src={`http://localhost:5000/products/${localSimilarProducts[0][1]}/${localSimilarProducts[index][0]}`} alt="" data-type={localSimilarProducts[0][1]}
-                                data-id={localSimilarProducts[index][0]} className="similar-product-img"/>  
+                                {/* <img src={`http://localhost:5000/products/${localSimilarProducts[0][1]}/${localSimilarProducts[index][0]}`} alt="" data-type={localSimilarProducts[0][1]}
+                                data-id={localSimilarProducts[index][0]} className="similar-product-img"/>   */}
+                                <img src={productImages[localSimilarProducts[0][1]][localSimilarProducts[index][0]-1]} alt="" data-type={localSimilarProducts[0][1]}
+                                data-id={localSimilarProducts[index][0]} className="similar-product-img"/> 
                                 <h4 data-data={localSimilarProducts[index][2]}>{localSimilarProducts[index][2]} </h4>
                                 <p data-data={localSimilarProducts[index][3]}>{localSimilarProducts[index][3]}</p>
                                 <p data-data={localSimilarProducts[index][4]}>$ {localSimilarProducts[index][4]}.00</p>

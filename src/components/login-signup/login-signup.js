@@ -34,7 +34,7 @@ function Login() {
     const userInfo = async (e)=> {
         if(e.target.innerHTML === 'Log In'){
             if(loginFormState && password && email.includes('@') && email.match(/(?<=@).*/)[0].includes('.') && !email.match(/\s/)){
-                const sentData = await fetch('http://localhost:5000/users/',
+                const sentData = await fetch('https://bogaad-store.herokuapp.com/users/',
                 {
                     method: 'GET',
                     headers: {
@@ -75,7 +75,7 @@ function Login() {
                     surname: surname,
                     password: password
                 }
-                const sentData = await fetch('http://localhost:5000/users/',
+                const sentData = await fetch('https://bogaad-store.herokuapp.com/users/',
                 {
                     method: 'POST',
                     headers: {'Content-type': 'application/json'},

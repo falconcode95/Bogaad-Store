@@ -1,4 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
+import productImages from '../../Data and Functions/productImages';
 
 const initialState = {
     category: 'All',
@@ -6,7 +7,8 @@ const initialState = {
     footerIntersecting: false,
     toggleNavBackground: false,
     activePage: '',
-    aboutUsActive: false
+    aboutUsActive: false,
+    productImages: productImages
 };
 
 export const shopSlice = createSlice({

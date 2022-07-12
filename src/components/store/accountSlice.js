@@ -9,7 +9,7 @@ const initialState = {
     },
     wishList: [],
     activeLink: '',
-    activeSection: 'account'
+    activeSection: 'account',
 };
 
 export const accountSlice = createSlice({
@@ -51,6 +51,6 @@ export const accountSlice = createSlice({
 })
 
 export const  { changeSignedInState, updateUser, updateSomeUser, addToWishList, 
-removeFromWishList, overideWishList, changeActiveLink, changeActiveSection } = accountSlice.actions;
+removeFromWishList, overideWishList, changeActiveLink, changeActiveSection} = accountSlice.actions;
 
 export default accountSlice.reducer

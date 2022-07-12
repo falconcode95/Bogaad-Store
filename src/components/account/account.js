@@ -16,6 +16,7 @@ import {updateSimilar} from '../store/cart';
 function Account() {
   const dispatch = useDispatch();
   const { email, name, surname} = useSelector(state => state.account.user);
+  const { productImages } = useSelector( state => state.shop);
   const {wishList} = useSelector(state => state.account);
   const {cartProducts} = useSelector( state => state.cart);
   const [activeFuture, setActiveFuture] = useState();
@@ -53,7 +54,7 @@ function Account() {
             value: activeFuture.value
           }
           console.log(data)
-          const sentData = await fetch('http://localhost:5000/users/',
+          const sentData = await fetch('https://bogaad-store.herokuapp.com//users/',
           {
             method: 'PUT',
             headers: {'Content-type': 'application/json'},
@@ -139,7 +140,7 @@ function Account() {
     const tokenlogin = async()=> {
         if(localStorage.getItem('jwt')){
             const token = localStorage.getItem('jwt');
-            const sentData = await fetch('http://localhost:5000/shortcut/',
+            const sentData = await fetch('https://bogaad-store.herokuapp.com/shortcut/',
             {
                 method: 'GET',
                 headers: {
@@ -170,7 +171,7 @@ function Account() {
   const clearUser = async(e)=> {
     if(e.target.getAttribute('data-id')){
       const deleteUser = {email: email, password: password};
-      const sentData = await fetch('http://localhost:5000/users/',
+      const sentData = await fetch('https://bogaad-store.herokuapp.com/users/',
         {
           method: 'DELETE',
           headers: {'Content-type': 'application/json'},
@@ -268,7 +269,7 @@ function Account() {
                 }
                 // console.log(JSON.stringify(jsonWishList)+ 'wishlist');
             }
-            const sentData = await fetch('http://localhost:5000/userdata/',
+            const sentData = await fetch('https://bogaad-store.herokuapp.com/userdata/',
             {
                 method: 'POST',
                 headers: {'Content-type': 'application/json'},
@@ -361,7 +362,7 @@ function Account() {
                 {wishList.map((item, index)=> {
                   return (
                     <div data-id={item.type} data-type={item.id}>
-                      <Link to="/Preview"><img src={`http://localhost:5000/products/${item.name}/${item.id}`} alt="" data-index={index} onClick={updatePreview}/></Link>
+                      <Link to="/Preview"><img src={productImages[item.name][item.id-1]} alt="" data-index={index} onClick={updatePreview}/></Link>
                      <Link to="/Preview"><h4 data-index={index} onClick={updatePreview}>{item.type}</h4></Link> 
                      <Link to="/Preview"><p data-index={index} onClick={updatePreview}>{item.subType}</p></Link> 
                      <Link to="/Preview"><p data-index={index} onClick={updatePreview}>$ {item.price}.00</p></Link> 

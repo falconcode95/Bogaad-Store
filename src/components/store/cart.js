@@ -17,6 +17,7 @@ export const cartSlice = createSlice({
     initialState,
     reducers : {
         changePreview: (state, action) => {
+            // console.log(action.payload, 'how about it');
             state.previewProduct = {
                 id: action.payload[0],
                 name: action.payload[1],

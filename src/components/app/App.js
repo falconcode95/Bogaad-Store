@@ -11,14 +11,12 @@ function App() {
   const { activePage } = useSelector((state)=> state.shop);
   const {aboutUsActive} = useSelector(state => state.shop);
   const dispatch = useDispatch();
-useEffect(()=> {
-  dispatch(changeActivePage('HOME'))
-}, [])
   useEffect(()=> {
+    dispatch(changeActivePage('HOME'))
     const tokenlogin = async()=> {
         if(localStorage.getItem('jwt')){
             const token = localStorage.getItem('jwt');
-            const sentData = await fetch('http://localhost:5000/shortcut/',
+            const sentData = await fetch('https://bogaad-store.herokuapp.com/shortcut/',
             {
                 method: 'GET',
                 headers: {

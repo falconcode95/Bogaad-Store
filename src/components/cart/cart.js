@@ -10,6 +10,7 @@ import {useEffect} from 'react';
 
 function Cart() {
     const { cartProducts } = useSelector(state => state.cart);
+    const {productImages} = useSelector( state => state.shop);
     const navigate = useNavigate();
     const {wishList} = useSelector( state => state.account);
     const {email} = useSelector( state => state.account.user);
@@ -27,7 +28,7 @@ function Cart() {
         const tokenlogin = async()=> {
             if(localStorage.getItem('jwt')){
                 const token = localStorage.getItem('jwt');
-                const sentData = await fetch('http://localhost:5000/shortcut/',
+                const sentData = await fetch('https://bogaad-store.herokuapp.com/shortcut/',
                 {
                     method: 'GET',
                     headers: {
@@ -98,7 +99,7 @@ function Cart() {
                     }
                     // console.log(JSON.stringify(jsonWishList)+ 'wishlist');
                 }
-                const sentData = await fetch('http://localhost:5000/userdata/',
+                const sentData = await fetch('https://bogaad-store.herokuapp.com/userdata/',
                 {
                     method: 'POST',
                     headers: {'Content-type': 'application/json'},
@@ -124,7 +125,7 @@ function Cart() {
                     product_data: {
                         name: cartProducts[x].type,
                         description: cartProducts[x].subType,
-                        images: [`http://localhost:5000/products/${cartProducts[x].name}/${cartProducts[x].id}`]
+                        images: [productImages[cartProducts[x].name][cartProducts[x].id-1]]
                     },
                     unit_amount: cartProducts[x].price * 100
                 },
@@ -132,8 +133,8 @@ function Cart() {
             }
             items.push(item)
         }
-        // console.log(items)
-        const sentData = await fetch('http://localhost:5000/payment', {
+        console.log(items)
+        const sentData = await fetch('https://bogaad-store.herokuapp.com/payment', {
             method: 'POST',
             headers: {
                 'content-type': 'application/json'
@@ -157,10 +158,10 @@ function Cart() {
                 {cartProducts.map((item, index)=> {
                     return (
                         <div className='Cart-item'>
-                            <img src={`http://localhost:5000/products/${cartProducts[index].name}/${cartProducts[index].id}`} alt="" className='product-mobile'/>   {/*This image is for mobiles!!*/}
+                            <img src={productImages[cartProducts[index].name][cartProducts[index].id-1]} alt="" className='product-mobile'/>   {/*This image is for mobiles!!*/}
                             <div className='cart-products-div'> 
                                 <div className='cart-product'>
-                                    <img src={`http://localhost:5000/products/${cartProducts[index].name}/${cartProducts[index].id}`} alt=""/>  
+                                    <img src={productImages[cartProducts[index].name][cartProducts[index].id-1]} alt=""/>  
                                     <div className='product-details'>
                                         <p><strong>Product:</strong> {cartProducts[index].type}</p>
                                         <p><strong>Type:</strong> {cartProducts[index].subType} </p>
