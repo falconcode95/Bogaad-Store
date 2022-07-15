@@ -21,6 +21,20 @@ function Login() {
     const signupFormState = signupForm.every(item=> item);
     const {signedIn} = useSelector(state => state.account);
     const dispatch = useDispatch();
+    const emailCheck = param => { 
+        let condition = param.includes('@'); 
+        if(condition){ 
+            let index = param.indexOf('@'); 
+            let data = param.slice(index+2); 
+            if(data.includes('.')){ 
+                return true;
+            } else {
+                return false;
+            }
+        } else { 
+            return false; 
+        } 
+    }; 
     let passwordWarning;
     if(password && !password.match(/[A-Z]/)){
         passwordWarning = 'Password must contain an Uppercase character'
@@ -33,7 +47,7 @@ function Login() {
     }
     const userInfo = async (e)=> {
         if(e.target.innerHTML === 'Log In'){
-            if(loginFormState && password && email.includes('@') && email.match(/(?<=@).*/)[0].includes('.') && !email.match(/\s/)){
+            if(loginFormState && password && email.includes('@') && emailCheck(email) && !email.match(/\s/)){
                 const sentData = await fetch('https://bogaad-store.herokuapp.com/users/',
                 {
                     method: 'GET',
@@ -66,7 +80,7 @@ function Login() {
             } 
         } else {
             if(signupFormState && password === retypePassword && email.includes('@')
-             && email.match(/(?<=@).*/)[0].includes('.') && !email.match(/\s/) && 
+             && emailCheck(email) && !email.match(/\s/) && 
              password.match(/[0-9]/) && password.match(/[!@#$%^&*()_+\-={};':"|,.<>/?]/) 
              && password.match(/[A-Z]/) && password.match(/[a-z]/)){
                 const form = { 
@@ -123,7 +137,7 @@ function Login() {
                 <img src={require('../../Projects Images/user.png')} alt="" />
                 <h5>E-mail</h5>
                 <input type="email" placeholder='example@bogaad.com' onChange={handleInput} value={email}/>
-                <p>{(email && (!email.includes('@') || !email.match(/(?<=@).*/)[0].includes('.') || email.match(/\s/))) && 'Enter a valid E-mail'}</p>
+                <p>{(email && (!email.includes('@') || !emailCheck(email) || email.match(/\s/))) && 'Enter a valid E-mail'}</p>
                 <h5>Password</h5>
                 <input type="password" placeholder='*******' onChange={handleInput} value={password}/>
                 <p>{(!email || !password) && 'Please fill all the blank spaces'}</p>
@@ -146,7 +160,7 @@ function Login() {
                     <img src={require('../../Projects Images/user.png')} alt="" className='signup-avatar'/>
                     <h5>E-mail</h5>
                     <input type="email" placeholder='example@bogaad.com' onChange={handleInput} value={email}/>
-                    <p>{(email && (!email.includes('@') || !email.match(/(?<=@).*/)[0].includes('.') || email.match(/\s/))) && 'Enter a valid E-mail'}</p>
+                    <p>{(email && (!email.includes('@') || !emailCheck(email) || email.match(/\s/))) && 'Enter a valid E-mail'}</p>
                     <h5>Name</h5>
                     <input type="text" placeholder='Abdullaziz' onChange={handleInput} value={name}/>
                     <p>{(name && name.length < 3) && 'Your Name is too short!'}</p>
