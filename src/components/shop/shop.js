@@ -1,6 +1,6 @@
 import'./shop.css';
 import Nav from '../Nav/nav';
-import { useRef, useEffect } from 'react';
+import { useRef, useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux'
 import { change, filter, changeActivePage } from "../store/secondPageSlice";
 import { changePreview, updateSimilar, overideCart} from '../store/cart';
@@ -15,15 +15,21 @@ function Shop() {
     const { filterBy} = useSelector((state)=> state.shop);
     const {activePage} = useSelector(state => state.shop);
     const {footerIntersecting} = useSelector((state)=> state.shop);
+    const [screen, setScreen] = useState(); 
     const dispatch = useDispatch();
     const categoryRef = useRef();
     const sideMenu = useRef();
     const array = ['C', 'a', 't', 'e', 'g', 'o', 'r', 'i', 'e', 's'];
     const {productImages} = useSelector(state => state.shop);
-    console.log(productImages.shirts)
+    window.addEventListener('resize', ()=> {
+        setScreen(window.screen.width);
+    });
+    useEffect(()=> {
+        setScreen(window.screen.width);
+    }, [])
     useEffect(()=> {
         dispatch(changeActivePage('SHOP'))
-      }, [])
+    }, [])
     useEffect(()=> {
         const tokenlogin = async()=> {
             if(localStorage.getItem('jwt')){
@@ -75,8 +81,10 @@ function Shop() {
     const {accessories, accessoryType, shirts, shirtTypes, trousers, trouserTypes, shoes, shoeType} = data;
     const changeCategory = (e)=> {
         const shopCategory = e.target.getAttribute('data-id');
-        categoryRef.current.style.display = 'none';
-        sideMenu.current.style.display = 'block'
+        if(screen < 769){
+            categoryRef.current.style.display = 'none';
+            sideMenu.current.style.display = 'block'
+        }
         dispatch(change(shopCategory));
         dispatch(filter(''));
     }

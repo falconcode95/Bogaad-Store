@@ -5,6 +5,7 @@
     background-position: top 20% right 60%;
     background-repeat: no-repeat;
     height: 100vh;
+    overflow: hidden;
 }
 
 .different-BG {

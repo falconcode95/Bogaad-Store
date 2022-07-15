@@ -11,12 +11,15 @@ function Nav() {
   const {name} = useSelector(state => state.account.user);
   const {activePage} = useSelector( state => state.shop);
   const [screen, setScreen] = useState(); 
-  const burgerDetails = useRef();
+  const burgerDetails = useRef(); 
   const close = useRef(); 
   const nav = useRef();
   const bag = useRef();
   const burgerMenu = useRef();
   window.addEventListener('resize', ()=> {
+    setScreen(window.screen.width);
+  });
+  useEffect(()=> {
     setScreen(window.screen.width);
   })
   const changeAboutUsState = (e)=> {
@@ -32,9 +35,11 @@ function Nav() {
     const element = e.target.getAttribute('data-id');
     if(element === 'burger'){
       burgerDetails.current.style.display = 'block';
+      burgerMenu.current.style.display = 'none';
       close.current.style.display = 'block'
     } else {
       burgerDetails.current.style.display = 'none';
+      burgerMenu.current.style.display = 'block';
       close.current.style.display = 'none' 
     }
    }
@@ -68,7 +73,8 @@ function Nav() {
         <Link to="/"><h4 onClick={changeAboutUsState}>HOME</h4></Link>
         <Link to=""><h4 onClick={changeAboutUsState}>ABOUT US</h4></Link>
         <Link to="/Shop"><h4>SHOP</h4></Link>
-        <Link to="/login"><h4>{!signedIn ? '' : 'LOG IN'}</h4></Link>
+        {!signedIn &&  <Link to="/login"><h4>LOG IN</h4></Link>}
+        {/* <Link to="/login"><h4>{!signedIn ? '' : 'LOG IN'}</h4></Link> */}
         <Link to={signedIn ? "/account" : ""}><h4>ACCOUNT</h4></Link>
       </div>
 
