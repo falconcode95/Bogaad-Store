@@ -4,6 +4,7 @@
     background-size: cover;
     background-position: top 20% right 60%;
     background-repeat: no-repeat;
+    height: 100vh;
     overflow-y: hidden;
 }
 
@@ -77,6 +78,7 @@ button {
         background-position: top 20% right 60%;
         background-repeat: no-repeat;
         height: 100vh;
+        overflow: hidden;
     }
 
     .landing-page-text {
