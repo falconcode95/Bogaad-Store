@@ -8,9 +8,11 @@ import { overideCart } from '../store/cart';
 import { Link } from 'react-router-dom';
 
 function App() {
-  const { activePage } = useSelector((state)=> state.shop);
+  const { activePage } = useSelector((state)=> state.shop); 
   const {aboutUsActive} = useSelector(state => state.shop);
+  const availableScreen = window.screen.height
   const dispatch = useDispatch();
+  console.log(window.screen.height)
   useEffect(()=> {
     dispatch(changeActivePage('HOME'))
     const tokenlogin = async()=> {
@@ -46,7 +48,7 @@ function App() {
 }, [])
   return (
     <div 
-    className={activePage === 'HOME' && aboutUsActive ? 'App different-BG' : 'App'}
+    className={activePage === 'HOME' && aboutUsActive ? 'App different-BG' : 'App'} style={{height: `${availableScreen}px`}}
     >
       <Nav />
       <div className='landing-page-text'>
