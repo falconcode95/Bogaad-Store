@@ -62,10 +62,12 @@ function Nav() {
 
       {/* mobile version */}
 
-      <div className='bagmobile'>
-          <img src={require('../../Projects Images/shopping-bag-mobile.png')} alt="" ref={bag} />
-          {cartProducts.length > 0 && <h6>{cartProducts.length}</h6>}
-      </div>
+      <Link to="/Cart"> 
+        <div className='bagmobile'>
+            <img src={require('../../Projects Images/shopping-bag-mobile.png')} alt="" ref={bag} />
+            {cartProducts.length > 0 && <h6>{cartProducts.length}</h6>}
+        </div>
+      </Link>
       <img src={require('../../Projects Images/menu.png')} alt="" className='burger' onClick={burger} data-id="burger" ref={burgerMenu}/>
       <img src={require('../../Projects Images/close.png')} alt="" className='burger close' onClick={burger} 
         data-id="close" ref={close}/>

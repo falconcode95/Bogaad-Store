@@ -221,15 +221,29 @@ html {
 
 @media (max-width: 768px) {
 
+    nav {
+        top: 0;
+    }
+
     .product-mobile {
         display: block;
     }
 
     .cart-page {
-        padding-inline: 2rem;
         font-size: 1rem;
     }
 
+    .shopping-cart, .order {
+        padding-inline: 2rem;
+    }
+
+    .newsletter {
+        border: none;
+    }
+
+    .newsletter input {
+        margin-inline: 0;
+    }
 
     .cart-page .cart-products-div, .cart-page .cart-product {
         display: flex;

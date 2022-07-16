@@ -90,6 +90,10 @@ function Shop() {
     }
     const changeFilter = (e) => { 
         const filterNumber = parseInt(e.target.getAttribute('data-id'));
+        if(screen < 769){
+            categoryRef.current.style.display = 'none';
+            sideMenu.current.style.display = 'block'
+        }
         dispatch(filter(filterNumber));
         dispatch(change(''));
     }

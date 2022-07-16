@@ -297,7 +297,7 @@ function Account() {
         {screen < 769 && 
           <div className='Account-category' ref={accountCategory} data-id="account-category" onClick={showDetails}>
             {array.map(item => {
-              return <p data-id="account-category">{item}</p>
+              return <p data-id="account-category">{item}</p> 
             })}
           </div>
         }

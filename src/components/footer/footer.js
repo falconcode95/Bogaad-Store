@@ -25,7 +25,7 @@ function Footer() {
     });
     const footerPadding = useRef();
     useEffect(()=> {
-        observer.observe(footer.current);
+        observer.observe(footer.current); 
     });
     const scroll = (e)=> {
         if(signedIn){        
