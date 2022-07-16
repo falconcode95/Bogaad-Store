@@ -286,7 +286,7 @@ function Account() {
 }, [cartProducts, wishList]) ;
   const showDetails = (e) => {
     let element = e.target.getAttribute('data-id');
-    if(element === 'account-category'){
+    if(element === 'account-category'){ 
       leftSide.current.style.display = 'block';
       accountCategory.current.style.display = 'none';
     }
@@ -326,10 +326,10 @@ function Account() {
                       <input type="text" value="***********" />
                     </div>
                     <div>
-                      <label data-id="email" onClick={changeActiveState}>Change</label>
-                      <label data-id="name" onClick={changeActiveState}>Change</label>
-                      <label data-id="surname" onClick={changeActiveState}>Change</label>
-                      <label data-id="password" onClick={changeActiveState}>Change</label>
+                      <label data-id="email" onClick={changeActiveState}>Edit</label>
+                      <label data-id="name" onClick={changeActiveState}>Edit</label>
+                      <label data-id="surname" onClick={changeActiveState}>Edit</label>
+                      <label data-id="password" onClick={changeActiveState}>Edit</label>
                     </div>
                   </div> :
                 <div >

@@ -96,7 +96,7 @@ function Footer() {
                 <Link to={signedIn ? "/account" : ""}><h3 onClick={scroll}>Account</h3></Link>
                 <div className='footer-details'>
                     <Link to={signedIn ? "/account" : ""}><h5  ref={footer} onClick={scroll} className='links'>My Account</h5></Link>
-                    <h5 onClick={scroll} className='links'>My Cart</h5>
+                    <Link to="/Cart"><h5 onClick={scroll} className='links'>My Cart</h5></Link> 
                     <Link to={signedIn ? "/account" : ""}><h5 onClick={scroll} className='links'>My Wishlist</h5> </Link>
                 </div>
             </div>
