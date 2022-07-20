@@ -183,6 +183,12 @@ nav {
     }
 }
 
+@media (min-width: 1275px) and (max-width: 1479px) {
+    .nav-links {
+        font-size: 0.85rem;
+    }
+}
+
 @media (min-width: 768px) and (max-width: 895px) {
     nav .cart {
         width: 30%;

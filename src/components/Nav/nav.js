@@ -21,6 +21,7 @@ function Nav() {
   });
   useEffect(()=> {
     setScreen(window.screen.width);
+    console.log(screen)
   })
   const changeAboutUsState = (e)=> {
     if(e.target.innerHTML === 'HOME'){
@@ -53,7 +54,7 @@ function Nav() {
         nav.current.style.color = 'white';
       }
     } else {
-      nav.current.style.color = 'black';
+      nav.current.style.color = 'black'; 
     }
   }, [screen])
   return (
